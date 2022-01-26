@@ -6,6 +6,6 @@ const validations = require('../validations/Users');
 const router = express.Router();
 
 router.get("/", index)
-router.post("/", validate(validations.createValidation), create)
+router.route("/").post(validate(validations.createValidation), create)
 
 module.exports = router;

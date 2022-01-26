@@ -1,4 +1,5 @@
 const Mongoose = require('mongoose');
+const { passwordHash } = require('../scripts/utils/helper');
 
 const UserSchema = new Mongoose.Schema({
     full_name: {
@@ -19,5 +20,18 @@ const UserSchema = new Mongoose.Schema({
         required: false,
     },
 }, { timestamps: true, versionKey: false });
+
+UserSchema.pre("save", function (next) {
+
+    if (!this.isModified('password'))
+        return next();
+
+    try {
+        this.password = passwordHash(this.password);
+        return next();
+    } catch (err) {
+        return next(err);
+    }
+})
 
 module.exports = Mongoose.model('user', UserSchema);
