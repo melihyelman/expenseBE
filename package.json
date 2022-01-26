@@ -1,0 +1,32 @@
+{
+  "name": "invoicebe",
+  "version": "1.0.0",
+  "description": "invoice-back-end",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/melihyelman/invoiceBE.git"
+  },
+  "keywords": [
+    "invoice"
+  ],
+  "author": "Melih Yelman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/melihyelman/invoiceBE/issues"
+  },
+  "homepage": "https://github.com/melihyelman/invoiceBE#readme",
+  "dependencies": {
+    "dotenv": "^14.3.2",
+    "express": "^4.17.2",
+    "helmet": "^5.0.2",
+    "http-status": "^1.5.0",
+    "mongoose": "^6.1.8"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
