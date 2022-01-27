@@ -1,7 +1,6 @@
 const Joi = require('joi');
 
 const createValidation = Joi.object({
-    from: Joi.string().required(),
     client: {
         name: Joi.string().required().min(3),
         email: Joi.string().email(),
