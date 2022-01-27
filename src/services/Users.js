@@ -11,7 +11,7 @@ const loginUser = (loginData) => {
 }
 
 const list = () => {
-    return User.find({});
+    return User.find({}, { password: 0 });
 }
 
 module.exports = {
