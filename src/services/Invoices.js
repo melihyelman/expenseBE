@@ -6,8 +6,8 @@ const insert = (data) => {
     return invoice.save();
 }
 
-const list = () => {
-    return Invoice.find({}).populate("from", { password: 0 });
+const list = (where) => {
+    return Invoice.find(where || {}).populate("from", { password: 0 });
 }
 
 module.exports = {

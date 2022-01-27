@@ -9,7 +9,8 @@ const create = (req, res) => {
         .catch((e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
 }
 const index = (req, res) => {
-    list()
+    console.log(req.user)
+    list({ from: req.user._id })
         .then((response) => res.status(httpStatus.OK).send(response))
         .catch((e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
 }
