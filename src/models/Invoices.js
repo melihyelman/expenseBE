@@ -1,5 +1,6 @@
 const Mongoose = require('mongoose');
 
+
 const ReceiverSchema = new Mongoose.Schema({
     name: {
         type: String,
@@ -11,22 +12,9 @@ const ReceiverSchema = new Mongoose.Schema({
     city: String,
     zipCode: String,
     country: String,
-})
-
-const ItemSchema = new Mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    price: {
-        type: Number,
-        required: true
-    },
-    quantity: {
-        type: Number,
-        required: true
-    },
 });
+
+
 
 const InvoiceSchema = new Mongoose.Schema({
     from: {
@@ -51,8 +39,18 @@ const InvoiceSchema = new Mongoose.Schema({
     },
     items: [
         {
-            type: ItemSchema,
-            required: true,
+            name: {
+                type: String,
+                required: true
+            },
+            price: {
+                type: Number,
+                required: true
+            },
+            quantity: {
+                type: Number,
+                required: true
+            },
         }
     ]
 
