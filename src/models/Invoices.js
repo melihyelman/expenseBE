@@ -1,7 +1,10 @@
 const Mongoose = require('mongoose');
 
 const ClientSchema = new Mongoose.Schema({
-    name: String,
+    name: {
+        type: String,
+        required: true
+    },
     email: String,
     phone: String,
     streetAddress: String,
@@ -11,9 +14,18 @@ const ClientSchema = new Mongoose.Schema({
 })
 
 const ItemSchema = new Mongoose.Schema({
-    name: String,
-    price: Number,
-    quantity: Number,
+    name: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true
+    },
+    quantity: {
+        type: Number,
+        required: true
+    },
 });
 
 const InvoiceSchema = new Mongoose.Schema({
@@ -44,7 +56,10 @@ const InvoiceSchema = new Mongoose.Schema({
         default: 'pending'
     },
     items: [
-        ItemSchema
+        {
+            type: ItemSchema,
+            required: true,
+        }
     ]
 
 }, { timestamps: true, versionKey: false });
