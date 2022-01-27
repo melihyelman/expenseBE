@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const { passwordHash, generateRefreshToken, generateAccessToken } = require('../scripts/utils/helper');
 const { insert, list, loginUser } = require("../services/Users");
+const invoiceService = require("../services/Invoices");
 
 const create = (req, res) => {
     insert(req.body)
@@ -33,8 +34,15 @@ const index = (req, res) => {
         .catch((e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
 }
 
+const invoicesList = (req, res) => {
+    invoiceService.list({ from: req.user._id })
+        .then((response) => res.status(httpStatus.OK).send(response))
+        .catch((e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
+}
+
 module.exports = {
     index,
     create,
-    login
+    login,
+    invoicesList
 }
