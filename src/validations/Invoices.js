@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const createValidation = Joi.object({
-    client: {
+    receiver: {
         name: Joi.string().required().min(3),
         email: Joi.string().email(),
         phone: Joi.string().min(5),
@@ -11,9 +11,9 @@ const createValidation = Joi.object({
         country: Joi.string().min(3),
     },
     description: Joi.string().required().min(3),
-    invoice_date: Joi.date().required(),
-    payment_date: Joi.date().required(),
-    items: Joi.array().items(
+    payment_date: Joi.date(),
+    payment_due: Joi.date(),
+    items: Joi.array().required().items(
         Joi.object({
             name: Joi.string().required().min(3),
             price: Joi.number().required().min(1),

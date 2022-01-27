@@ -1,6 +1,6 @@
 const Mongoose = require('mongoose');
 
-const ClientSchema = new Mongoose.Schema({
+const ReceiverSchema = new Mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -30,26 +30,20 @@ const ItemSchema = new Mongoose.Schema({
 
 const InvoiceSchema = new Mongoose.Schema({
     from: {
-        type: Mongoose.Schema.Types.ObjectId,
+        type: Mongoose.Types.ObjectId,
         ref: "user",
         required: true,
     },
-    client: {
-        type: ClientSchema,
+    receiver: {
+        type: ReceiverSchema,
         required: true,
     },
     description: {
         type: String,
         required: true,
     },
-    invoice_date: {
-        type: Date,
-        default: Date.now
-    },
-    payment_date: {
-        type: Date,
-        required: true,
-    },
+    payment_date: Date,
+    payment_due: Date,
     status: {
         type: String,
         enum: ['pending', 'paid'],
