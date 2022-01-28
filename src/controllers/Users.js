@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const { passwordHash, generateRefreshToken, generateAccessToken } = require('../scripts/utils/helper');
-const { insert, list, loginUser, modify } = require("../services/Users");
+const { insert, list, loginUser, modify, remove } = require("../services/Users");
 const invoiceService = require("../services/Invoices");
 const eventEmitter = require("../scripts/events/eventEmitter");
 
@@ -64,11 +64,26 @@ const update = (req, res) => {
 
 }
 
+const deleteUser = (req, res) => {
+    if (!req.params?.id) {
+        return res.status(httpStatus.BAD_REQUEST).send({ error: 'id bilgisi zorunludur.' });
+    }
+    remove(req.params.id)
+        .then(response => {
+            if (!response)
+                return res.status(httpStatus.NOT_FOUND).send({ error: "Böyle bir kullanıcı bulunamadı." })
+
+            res.status(httpStatus.OK).send({ message: "Kullanıcı silindi." })
+        })
+        .catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
+}
+
 module.exports = {
     index,
     create,
     login,
     update,
     invoicesList,
-    resetPassword
+    resetPassword,
+    deleteUser
 }

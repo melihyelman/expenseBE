@@ -1,5 +1,5 @@
 const express = require('express');
-const { index, create, login, update, invoicesList, resetPassword } = require('../controllers/Users');
+const { index, create, login, update, invoicesList, resetPassword, deleteUser } = require('../controllers/Users');
 const validate = require('../middlewares/validate');
 const validations = require('../validations/Users');
 const authenticate = require("../middlewares/authenticate");
@@ -7,6 +7,7 @@ const authenticate = require("../middlewares/authenticate");
 const router = express.Router();
 
 router.route("/").get(index)
+router.route("/:id").delete(authenticate, deleteUser)
 router.route("/invoices").get(authenticate, invoicesList)
 
 router.route("/").post(validate(validations.createValidation), create)
