@@ -78,6 +78,16 @@ const deleteUser = (req, res) => {
         .catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
 }
 
+const changePassword = (req, res) => {
+    if (req.body.password !== req.body.confirm_password)
+        return res.status(httpStatus.BAD_REQUEST).send({ error: "Şifreler uyuşmuyor." });
+
+    req.body.password = passwordHash(req.body.password);
+    modify({ _id: req.user?._id }, { password: req.body.password })
+        .then(response => res.status(httpStatus.OK).send(response))
+        .catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
+}
+
 module.exports = {
     index,
     create,
@@ -85,5 +95,6 @@ module.exports = {
     update,
     invoicesList,
     resetPassword,
-    deleteUser
+    deleteUser,
+    changePassword
 }
