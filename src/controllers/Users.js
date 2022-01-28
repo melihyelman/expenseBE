@@ -1,7 +1,8 @@
 const httpStatus = require('http-status');
 const { passwordHash, generateRefreshToken, generateAccessToken } = require('../scripts/utils/helper');
-const { insert, list, loginUser } = require("../services/Users");
+const { insert, list, loginUser, modify } = require("../services/Users");
 const invoiceService = require("../services/Invoices");
+const eventEmitter = require("../scripts/events/eventEmitter");
 
 const create = (req, res) => {
     insert(req.body)
@@ -13,7 +14,7 @@ const login = (req, res) => {
     req.body.password = passwordHash(req.body.password);
     loginUser(req.body)
         .then((response) => {
-            if (!response) return res.status(httpStatus.NOT_FOUND).send({ message: "Böyle bir kullanıcı bulunamadı." })
+            if (!response) return res.status(httpStatus.NOT_FOUND).send({ error: "Böyle bir kullanıcı bulunamadı." })
 
             response = {
                 ...response.toObject(),
@@ -25,7 +26,6 @@ const login = (req, res) => {
             res.status(httpStatus.OK).send(response)
         })
         .catch((e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e));
-
 }
 
 const index = (req, res) => {
@@ -40,9 +40,35 @@ const invoicesList = (req, res) => {
         .catch((e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
 }
 
+const resetPassword = (req, res) => {
+
+    const new_password = Math.random().toString(36).slice(-8);
+    modify({ email: req.body.email }, { password: passwordHash(new_password) })
+        .then(response => {
+            if (!response)
+                return res.status(httpStatus.NOT_FOUND).send({ error: "Böyle bir kullanıcı bulunamadı." })
+
+            eventEmitter.emit("send_email", {
+                to: response.email,
+                subject: "Şifre Yenileme",
+                html: `Şifre sıfırlama işleminiz gerçekleştirmiştir. <br /> Şifrenizi değiştirmeyi unutmayın! <br /> Yeni şifreniz: <b>${new_password}</b>`
+            });
+            res.status(httpStatus.OK).send({ message: "Şifre sıfırlama maili gönderildi." })
+        }).catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
+}
+
+const update = (req, res) => {
+    modify({ _id: req.user._id }, req.body)
+        .then(response => res.status(httpStatus.OK).send(response))
+        .catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
+
+}
+
 module.exports = {
     index,
     create,
     login,
-    invoicesList
+    update,
+    invoicesList,
+    resetPassword
 }
