@@ -13,9 +13,13 @@ const list = (where) => {
 const modify = (id, data) => {
     return Invoice.findByIdAndUpdate(id, data, { new: true });
 }
+const remove = (id) => {
+    return Invoice.findByIdAndDelete(id);
+}
 
 module.exports = {
     insert,
     list,
-    modify
+    modify,
+    remove,
 }
