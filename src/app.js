@@ -22,4 +22,5 @@ app.listen(process.env.APP_PORT, () => {
     console.log("Sunucu ayağa kalktı...");
     app.use("/users", UserRoutes);
     app.use("/invoices", InoviceRoutes);
+    app.use("*", (req, res) => res.status(404).send({ message: "Not Found" }));
 })
