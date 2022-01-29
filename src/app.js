@@ -18,7 +18,7 @@ app.use(helmet());
 app.use(fileUpload());
 
 
-app.listen(process.env.APP_PORT, () => {
+app.listen(process.env.PORT, () => {
     console.log("Sunucu ayağa kalktı...");
     app.use("/users", UserRoutes);
     app.use("/invoices", InoviceRoutes);
