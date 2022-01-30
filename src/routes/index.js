@@ -1,2 +1,2 @@
 module.exports.UserRoutes = require('./Users');
-module.exports.InoviceRoutes = require('./Invoices');
+module.exports.ExpenseRoutes = require('./Expenses');

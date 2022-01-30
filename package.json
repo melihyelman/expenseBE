@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/melihyelman/invoiceBE#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "crypto-js": "^4.1.1",
     "dotenv": "^14.3.2",
     "express": "^4.17.2",

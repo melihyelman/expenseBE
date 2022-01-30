@@ -1,37 +1,28 @@
 const Mongoose = require('mongoose');
 
 
-const ReceiverSchema = new Mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    email: String,
-    phone: String,
-    streetAddress: String,
-    city: String,
-    zipCode: String,
-    country: String,
-});
-
-
-
-const InvoiceSchema = new Mongoose.Schema({
-    from: {
+const ExpenseSchema = new Mongoose.Schema({
+    user: {
         type: Mongoose.Types.ObjectId,
         ref: "user",
         required: true,
     },
-    receiver: {
-        type: ReceiverSchema,
-        required: true,
-    },
-    description: {
+    title: {
         type: String,
         required: true,
     },
+    category: {
+        type: Mongoose.Types.ObjectId,
+        ref: "category",
+        required: true,
+    },
+    description: String,
     payment_date: Date,
     payment_due: Date,
+    expense_date : {
+        type: Date,
+        default: Date.now
+    },
     status: {
         type: String,
         enum: ['pending', 'paid'],
@@ -57,4 +48,4 @@ const InvoiceSchema = new Mongoose.Schema({
 }, { timestamps: true, versionKey: false });
 
 
-module.exports = Mongoose.model('invoice', InvoiceSchema);
+module.exports = Mongoose.model('expense', ExpenseSchema);

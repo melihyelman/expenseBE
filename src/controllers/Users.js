@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
 const { passwordHash, generateRefreshToken, generateAccessToken } = require('../scripts/utils/helper');
 const { insert, list, loginUser, modify, remove } = require("../services/Users");
-const invoiceService = require("../services/Invoices");
+const expenseService = require("../services/Expenses");
 const eventEmitter = require("../scripts/events/eventEmitter");
 const path = require('path');
 
@@ -36,7 +36,7 @@ const index = (req, res) => {
 }
 
 const invoicesList = (req, res) => {
-    invoiceService.list({ from: req.user._id })
+    expenseService.list({ from: req.user._id })
         .then((response) => res.status(httpStatus.OK).send(response))
         .catch((e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
 }
