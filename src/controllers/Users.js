@@ -15,7 +15,7 @@ const login = (req, res) => {
     req.body.password = passwordHash(req.body.password);
     loginUser(req.body)
         .then((response) => {
-            if (!response) return res.status(httpStatus.NOT_FOUND).send({ error: "Böyle bir kullanıcı bulunamadı." })
+            if (!response) return res.status(httpStatus.NOT_FOUND).send({ error: "Not found user." })
 
             response = {
                 ...response.toObject(),
@@ -35,7 +35,7 @@ const index = (req, res) => {
         .catch((e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
 }
 
-const invoicesList = (req, res) => {
+const expensesList = (req, res) => {
     expenseService.list({ from: req.user._id })
         .then((response) => res.status(httpStatus.OK).send(response))
         .catch((e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
@@ -47,14 +47,14 @@ const resetPassword = (req, res) => {
     modify({ email: req.body.email }, { password: passwordHash(new_password) })
         .then(response => {
             if (!response)
-                return res.status(httpStatus.NOT_FOUND).send({ error: "Böyle bir kullanıcı bulunamadı." })
+                return res.status(httpStatus.NOT_FOUND).send({ error: "Not found user" })
 
             eventEmitter.emit("send_email", {
                 to: response.email,
                 subject: "Şifre Yenileme",
                 html: `Şifre sıfırlama işleminiz gerçekleştirmiştir. <br /> Şifrenizi değiştirmeyi unutmayın! <br /> Yeni şifreniz: <b>${new_password}</b>`
             });
-            res.status(httpStatus.OK).send({ message: "Şifre sıfırlama maili gönderildi." })
+            res.status(httpStatus.OK).send({ message: "Sended reset password." })
         }).catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
 }
 
@@ -67,23 +67,21 @@ const update = (req, res) => {
 
 const deleteUser = (req, res) => {
     if (!req.params?.id) {
-        return res.status(httpStatus.BAD_REQUEST).send({ error: 'id bilgisi zorunludur.' });
+        return res.status(httpStatus.BAD_REQUEST).send({ error: 'Id information is required.' });
     }
     remove(req.params.id)
         .then(response => {
             if (!response)
-                return res.status(httpStatus.NOT_FOUND).send({ error: "Böyle bir kullanıcı bulunamadı." })
+                return res.status(httpStatus.NOT_FOUND).send({ error: "Not found user." })
 
-            res.status(httpStatus.OK).send({ message: "Kullanıcı silindi." })
+            res.status(httpStatus.OK).send({ message: "Deleted user." })
         })
         .catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
 }
 
 const changePassword = (req, res) => {
-    if (req.body.password !== req.body.confirm_password)
-        return res.status(httpStatus.BAD_REQUEST).send({ error: "Şifreler uyuşmuyor." });
-
     req.body.password = passwordHash(req.body.password);
+
     modify({ _id: req.user?._id }, { password: req.body.password })
         .then(response => res.status(httpStatus.OK).send(response))
         .catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
@@ -91,10 +89,10 @@ const changePassword = (req, res) => {
 
 const updateProfileImage = (req, res) => {
     if (!req?.files?.profile_image)
-        return res.status(httpStatus.BAD_REQUEST).send({ error: "Resim yüklemek zorundasınız" });
+        return res.status(httpStatus.BAD_REQUEST).send({ error: "Image upload is required." });
 
     if (!(path.extname(req.files.profile_image.name) === ".png" || path.extname(req.files.profile_image.name) === ".jpg"))
-        return res.status(httpStatus.BAD_REQUEST).send({ error: "Resim formatı .png veya .jpg olmalıdır." });
+        return res.status(httpStatus.BAD_REQUEST).send({ error: "Image extension must end with .png or .jpg." });
 
     const fileName = `${req.user._id}${path.extname(req.files.profile_image.name)}`
     const folderPath = path.join(__dirname, "../uploads/users", fileName);
@@ -113,7 +111,7 @@ module.exports = {
     create,
     login,
     update,
-    invoicesList,
+    expensesList,
     resetPassword,
     deleteUser,
     changePassword,
