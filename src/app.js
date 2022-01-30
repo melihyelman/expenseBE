@@ -6,7 +6,7 @@ const loaders = require("./loaders");
 const events = require("./scripts/events");
 const path = require('path');
 const cors = require('cors');
-const { UserRoutes, ExpenseRoutes } = require("./routes");
+const { UserRoutes, ExpenseRoutes, CategoryRoutes } = require("./routes");
 
 config();
 loaders();
@@ -24,5 +24,6 @@ app.listen(process.env.PORT, () => {
     console.log("Sunucu ayağa kalktı...");
     app.use("/users", UserRoutes);
     app.use("/expenses", ExpenseRoutes);
+    app.use("/categories", CategoryRoutes);
     app.use("*", (req, res) => res.status(404).send({ message: "Not Found" }));
 })
