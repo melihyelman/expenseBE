@@ -7,7 +7,7 @@ const insert = (data) => {
 }
 
 const list = (where) => {
-    return Expense.find(where || {}).populate("user", { password: 0 });
+    return Expense.find(where || {}).populate("user", { password: 0 }).populate("category", { title: 1 });
 }
 
 const modify = (id, data) => {
