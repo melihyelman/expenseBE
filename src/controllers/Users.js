@@ -93,6 +93,9 @@ const updateProfileImage = (req, res) => {
     if (!req?.files?.profile_image)
         return res.status(httpStatus.BAD_REQUEST).send({ error: "Resim yüklemek zorundasınız" });
 
+    if (!(path.extname(req.files.profile_image.name) === ".png" || path.extname(req.files.profile_image.name) === ".jpg"))
+        return res.status(httpStatus.BAD_REQUEST).send({ error: "Resim formatı .png veya .jpg olmalıdır." });
+
     const fileName = `${req.user._id}${path.extname(req.files.profile_image.name)}`
     const folderPath = path.join(__dirname, "../uploads/users", fileName);
 

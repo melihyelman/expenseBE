@@ -17,8 +17,13 @@ const UserSchema = new Mongoose.Schema({
     },
     profile_image: {
         type: String,
-        required: false,
+        default: 'default.png',
     },
+    phone: String,
+    streetAddress: String,
+    city: String,
+    zipCode: String,
+    country: String,
 }, { timestamps: true, versionKey: false });
 
 UserSchema.pre("save", function (next) {

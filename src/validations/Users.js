@@ -14,6 +14,14 @@ const loginValidation = Joi.object({
 const updateValidation = Joi.object({
     full_name: Joi.string().min(3),
     email: Joi.string().email(),
+    phone: Joi.string().min(5),
+    streetAddress: Joi.string().min(3),
+    city: Joi.string().min(3),
+    zipCode: Joi.string().min(3),
+    country: Joi.string().min(3),
+    _id: Joi.string().min(3),
+    createdAt: Joi.date(),
+    updatedAt: Joi.date()
 })
 
 const resetPasswordValidation = Joi.object({
