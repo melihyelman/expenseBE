@@ -17,16 +17,9 @@ const ExpenseSchema = new Mongoose.Schema({
         required: true,
     },
     description: String,
-    payment_date: Date,
-    payment_due: Date,
-    expense_date : {
+    expense_date: {
         type: Date,
         default: Date.now
-    },
-    status: {
-        type: String,
-        enum: ['pending', 'paid'],
-        default: 'pending'
     },
     items: [
         {
@@ -42,6 +35,11 @@ const ExpenseSchema = new Mongoose.Schema({
                 type: Number,
                 required: true
             },
+            currency: {
+                type: String,
+                required: true,
+                enum: ['USD', 'EUR', 'GBP', 'TRY']
+            }
         }
     ]
 

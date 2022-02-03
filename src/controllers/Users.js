@@ -36,7 +36,20 @@ const index = (req, res) => {
 }
 
 const expensesList = (req, res) => {
-    expenseService.list({ from: req.user._id })
+    const notAllowed = ["", null, undefined];
+    const allowed = ["expense_date", "category", "title", "description"]
+
+    const filteredQuery = Object.fromEntries(Object.entries(req.query).filter(([_, v]) => !notAllowed.includes(v.trim()) && allowed.includes(_.trim())));
+    // regex kullanımı
+    // filteredQuery.description = { $regex: new RegExp(filteredQuery.description, "i") }
+    // filteredQuery.title = { $regex: new RegExp(filteredQuery.title, "i") }
+
+    if (req.query.page && req.query.limit)
+        return expenseService.list({ user: req.user._id, ...filteredQuery }).limit(req.query.limit).skip((req.query.page - 1) * req.query.limit)
+            .then((response) => res.status(httpStatus.OK).send(response))
+            .catch((e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
+
+    expenseService.list({ user: req.user._id, ...filteredQuery })
         .then((response) => res.status(httpStatus.OK).send(response))
         .catch((e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e))
 }
