@@ -21,6 +21,11 @@ const ExpenseSchema = new Mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    currency: {
+        type: String,
+        required: true,
+        enum: ['USD', 'EUR', 'GBP', 'TRY']
+    },
     items: [
         {
             name: {
@@ -35,11 +40,6 @@ const ExpenseSchema = new Mongoose.Schema({
                 type: Number,
                 required: true
             },
-            currency: {
-                type: String,
-                required: true,
-                enum: ['USD', 'EUR', 'GBP', 'TRY']
-            }
         }
     ]
 

@@ -6,11 +6,11 @@ const createValidation = Joi.object({
     description: Joi.string().min(2),
     expense_date: Joi.date(),
     category: Joi.string().required(),
+    currency: Joi.string().required().valid('USD', 'EUR', 'GBP', 'TRY'),
     items: Joi.array().required().items(Joi.object({
         name: Joi.string().min(2).required(),
         price: Joi.number().min(0).required(),
         quantity: Joi.number().min(0).required(),
-        currency: Joi.string().required().valid('USD', 'EUR', 'GBP', 'TRY')
     }))
 });
 
@@ -21,11 +21,12 @@ const updateValidation = Joi.object({
     description: Joi.string().min(2),
     expense_date: Joi.date(),
     category: Joi.string(),
+    currency: Joi.string().required().valid('USD', 'EUR', 'GBP', 'TRY'),
     items: Joi.array().items(Joi.object({
+        _id: Joi.string().min(3),
         name: Joi.string().min(2).required(),
         price: Joi.number().min(0).required(),
         quantity: Joi.number().min(0).required(),
-        currency: Joi.string().required().valid('USD', 'EUR', 'GBP', 'TRY')
     })),
     createdAt: Joi.date(),
     updatedAt: Joi.date()
